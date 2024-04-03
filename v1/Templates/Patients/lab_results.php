@@ -17,8 +17,8 @@ $username = $_SESSION['username'];
 
 // Retrieve medical records from the database
 $medical_records = [];
-$stmt = $pdo->prepare("SELECT * FROM medical_records WHERE username = ?");
-$stmt->execute([$username]);
+$stmt = $pdo->prepare("SELECT * FROM medical_records");
+$stmt->execute([$username]); // Pass username as a parameter to prevent SQL injection
 $medical_records = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

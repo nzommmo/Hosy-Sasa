@@ -7,16 +7,14 @@ session_start();
 
 // Check if user is not logged in, redirect to login page or display message
 if (!isset($_SESSION['user_id'])) {
-
     // Redirect to login page or display message
     header("Location: ../login.php"); // Change 'login.php' to your actual login page
     exit();
 }
 
 // Retrieve username and user_id from the session
+$username = $_SESSION['username'];
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT * FROM users WHERE user_id = ?";
-
 ?>
 
 
