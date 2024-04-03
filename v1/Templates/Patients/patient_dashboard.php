@@ -1,3 +1,24 @@
+<?php
+// Include the config.php file to establish database connection
+include_once "config.php";
+
+// Start PHP session
+session_start();
+
+// Check if user is not logged in, redirect to login page or display message
+if (!isset($_SESSION['user_id'])) {
+
+    // Redirect to login page or display message
+    header("Location: ../login.php"); // Change 'login.php' to your actual login page
+    exit();
+}
+
+// Retrieve username and user_id from the session
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM users WHERE user_id = ?";
+
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -126,7 +147,7 @@
     <!-- Divider -->
     <div class="divider">____________</div>
     <a href="#" id="addstudentbtn">Vital Signs</a>
-    <a href="#" id="addstudentbtn">Medical Records </a>
+    <a href="" id="addstudentbtn">Medical Records </a>
     <a href="#" id="addstudentbtn">Lab Results</a>
     <div class="divider">_________________</div>
 
@@ -134,7 +155,7 @@
     <a href="#">Logout</a>
 </div>
 <!-- Page content -->
-<div class="container mt-5 content flexible-div">
+<div class="container mt-5 content flexible-div" style="width: 700px;">
     <!-- Welcome Message Card -->
     <div class="row">
         <div class="col-md-12 mb-4">
@@ -173,6 +194,8 @@
                 </div>
             </div>
         </div>
+
+
         <!-- Blood Pressure Card -->
         <div class="col-md-4 mb-4">
             <div class="card">
@@ -184,8 +207,69 @@
                 </div>
             </div>
         </div>
+        <!-- Medical Records Card -->
+            <div class="card">
+                <div class="card-header">
+                    Medical Records
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($medical_records as $record): ?>
+            <tr>
+                <td><?php echo $record['title']; ?></td>
+                <td><?php echo $record['description']; ?></td>
+                <td><?php echo $record['date']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+                <!-- Lab Results Card -->
+                <div class="card">
+                <div class="card-header">
+                    Lab  Results
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Test Name</th>
+            <th scope="col">Result Value</th>
+            <th scope="col">Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($lab_results as $result): ?>
+            <tr>
+                <td><?php echo $result['test_name']; ?></td>
+                <td><?php echo $result['result_value']; ?></td>
+                <td><?php echo $result['date']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+
+        
+        
     </div>
+
 </div>
+
+
+
 
 <!-- Right sidebar -->
 <div class="right-sidebar">

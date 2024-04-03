@@ -2,6 +2,9 @@
 // Include database connection
 include_once '../Templates/config.php';
 
+// Start PHP session
+session_start();
+
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if login form is submitted
@@ -18,6 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && mysqli_num_rows($result) > 0) {
             // Fetch user details
             $user = mysqli_fetch_assoc($result);
+
+            // Set session variables
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_type'] = $user['user_type'];
 
             // Check user type and redirect accordingly
             if ($user['user_type'] == 'Admin') {
