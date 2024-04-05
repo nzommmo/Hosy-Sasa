@@ -1,6 +1,6 @@
 <?php
 // Include the config.php file to establish database connection
-include_once "config.php";
+include_once "../config.php";
 
 // Start PHP session
 session_start();
@@ -13,8 +13,36 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Retrieve username and user_id from the session
-$username = $_SESSION['username'];
 $user_id = $_SESSION['user_id'];
+
+// Fetch user's information from the database based on user_id
+$sql = "SELECT * FROM users WHERE user_id = $user_id";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $firstname = $user['first_name'];
+    // You can fetch other user details here if needed
+}
+
+// Fetch user's medical records from the database based on user_id
+$sql_medical = "SELECT * FROM medical_records WHERE user_id = $user_id";
+$result_medical = $conn->query($sql_medical);
+$medical_records = array();
+if ($result_medical) {
+    while ($row = $result_medical->fetch_assoc()) {
+        $medical_records[] = $row;
+    }
+} 
+// Fetch user's lab results from the database based on user_id
+$sql_lab = "SELECT * FROM lab_results WHERE user_id = $user_id";
+$result_lab = $conn->query($sql_lab);
+$lab_results = array();
+if ($result_lab) {
+    while ($row = $result_lab->fetch_assoc()) {
+        $lab_results[] = $row;
+    }
+} 
 ?>
 
 
@@ -135,7 +163,7 @@ $user_id = $_SESSION['user_id'];
 <div id="mySidebar" class="sidebar">
     <!-- Divider with user's name and date -->
     <div class="divider"  id="date">
-        <span><?php echo $username; ?></span><br>
+        <span><?php echo $firstname; ?></span><br>
         <span>Date: <?php echo date("Y-m-d"); ?></span>
     </div>
     <!-- Close button -->
@@ -159,7 +187,7 @@ $user_id = $_SESSION['user_id'];
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-header">
-                    Welcome <?php echo $username; ?>!
+                    Welcome <?php echo $firstname; ?>!
                 </div>
                 <div class="card-body">
                     <p class="card-text">Welcome to your dashboard. Here you can manage your vital signs, medical records, lab results, and more.</p>
@@ -205,65 +233,66 @@ $user_id = $_SESSION['user_id'];
                 </div>
             </div>
         </div>
-        <!-- Medical Records Card -->
-            <div class="card">
-                <div class="card-header">
-                    Medical Records
-                </div>
-                <div class="card-body">
-                <table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($medical_records as $record): ?>
-            <tr>
-                <td><?php echo $record['title']; ?></td>
-                <td><?php echo $record['description']; ?></td>
-                <td><?php echo $record['date']; ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-                </div>
-            </div>
-        </div>
-                <!-- Lab Results Card -->
-                <div class="card">
-                <div class="card-header">
-                    Lab  Results
-                </div>
-                <div class="card-body">
-                <table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Test Name</th>
-            <th scope="col">Result Value</th>
-            <th scope="col">Comment</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($lab_results as $result): ?>
-            <tr>
-                <td><?php echo $result['test_name']; ?></td>
-                <td><?php echo $result['result_value']; ?></td>
-                <td><?php echo $result['date']; ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-                </div>
-            </div>
-        </div>
-
-        
-        
+<!-- Medical Records Card -->
+<div class="card">
+    <div class="card-header">
+        Medical Records
     </div>
+    <div class="card-body">
+        <?php if (count($medical_records) > 0): ?>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($medical_records as $record): ?>
+                        <tr>
+                            <td><?php echo $record['title']; ?></td>
+                            <td><?php echo $record['description']; ?></td>
+                            <td><?php echo $record['date']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No medical records found for the user.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
+<!-- Lab Results Card -->
+<div class="card">
+    <div class="card-header">
+        Lab Results
+    </div>
+    <div class="card-body">
+        <?php if (count($lab_results) > 0): ?>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Test Name</th>
+                        <th scope="col">Result Value</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($lab_results as $result): ?>
+                        <tr>
+                            <td><?php echo $result['test_name']; ?></td>
+                            <td><?php echo $result['result_value']; ?></td>
+                            <td><?php echo $result['date']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No lab results found for the user.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 
