@@ -1,6 +1,6 @@
 <?php
 // Include database connection
-include_once '../config.php';
+include_once 'config.php';
 
 // Start PHP session
 session_start();
@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Get username and password from form
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $user_id = $_POST['user_id'];
 
         // Query to check if user exists
         $sql = "SELECT * FROM users WHERE username = '$username' AND password_hash = '$password'";
