@@ -26,7 +26,10 @@ if ($result->num_rows > 0) {
 }
 
 // Fetch user's medical records from the database based on user_id
-$sql_medical = "SELECT * FROM medical_records WHERE user_id = $user_id";
+$sql_medical = "SELECT * FROM medical_records 
+                    INNER JOIN patients ON medical_records.patient_id = patients.patient_id 
+                    WHERE patients.user_id = $user_id";
+
 $result_medical = $conn->query($sql_medical);
 $medical_records = array();
 if ($result_medical) {
@@ -35,7 +38,10 @@ if ($result_medical) {
     }
 } 
 // Fetch user's lab results from the database based on user_id
-$sql_lab = "SELECT * FROM lab_results WHERE user_id = $user_id";
+$sql_lab = "SELECT * FROM lab_results 
+                    INNER JOIN patients ON lab_results.patient_id = patients.patient_id 
+                    WHERE patients.user_id = $user_id";
+
 $result_lab = $conn->query($sql_lab);
 $lab_results = array();
 if ($result_lab) {
@@ -62,6 +68,22 @@ if ($result_appointments) {
         );
     }
 }
+// Fetch user's vital signs from the database based on user_id
+$sql_vital_signs = "SELECT * FROM vital_signs 
+                    INNER JOIN patients ON vital_signs.patient_id = patients.patient_id 
+                    WHERE patients.user_id = $user_id";
+$result_vital_signs = $conn->query($sql_vital_signs);
+$vital_signs = array();
+if ($result_vital_signs) {
+    while ($row = $result_vital_signs->fetch_assoc()) {
+        $vital_signs[$row['sign_name']] = $row['sign_value'];
+    }
+}
+
+// Get values for body temperature, oxygen levels, and blood pressure
+$body_temperature = isset($vital_signs['Body Temperature']) ? $vital_signs['Body Temperature'] : 'N/A';
+$oxygen_levels = isset($vital_signs['Oxygen Levels']) ? $vital_signs['Oxygen Levels'] : 'N/A';
+$blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pressure'] : 'N/A';
 
 
 
@@ -76,6 +98,7 @@ if ($result_appointments) {
     <title>Toggleable Sidebar</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../Static/patients.css">
+    <script src="https://cdn.jsdelivr.net/npm/progressbar.js/dist/progressbar.min.js"></script>
 
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
@@ -221,41 +244,43 @@ if ($result_appointments) {
 
     <!-- Existing Cards -->
     <div class="row">
-        <!-- Body Temperature Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    Body Temperature
-                </div>
-                <div class="card-body">
-                    <p class="card-text">37°C</p>
-                </div>
-            </div>
+<!-- Body Temperature Card -->
+<!-- Body Temperature Card -->
+<div class="col-md-4 mb-4">
+    <div class="card">
+        <div class="card-header">
+            Body Temperature
         </div>
-        <!-- Oxygen Levels Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    Oxygen Levels
-                </div>
-                <div class="card-body">
-                    <p class="card-text">98%</p>
-                </div>
-            </div>
+        <div class="card-body">
+            <div id="bodyTemperatureProgress"></div>
         </div>
+    </div>
+</div>
 
+<!-- Oxygen Levels Card -->
+<div class="col-md-4 mb-4">
+    <div class="card">
+        <div class="card-header">
+            Oxygen Levels
+        </div>
+        <div class="card-body">
+            <div id="oxygenLevelsProgress"></div>
+        </div>
+    </div>
+</div>
 
-        <!-- Blood Pressure Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    Blood Pressure
-                </div>
-                <div class="card-body">
-                    <p class="card-text">120/80 mmHg</p>
-                </div>
+<!-- Blood Pressure Card -->
+<div class="col-md-4 mb-4">
+    <div class="card">
+        <div class="card-header">
+            Blood Pressure
+        </div>
+        <div class="card-body">
+            <div id="bloodPressureProgress">
             </div>
         </div>
+    </div>
+</div>
 <!-- Medical Records Card -->
 <div class="card">
     <div class="card-header">
@@ -266,17 +291,17 @@ if ($result_appointments) {
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Diagnosis</th>
+                        <th scope="col">Prescription</th>
                         <th scope="col">Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($medical_records as $record): ?>
                         <tr>
-                            <td><?php echo $record['title']; ?></td>
-                            <td><?php echo $record['description']; ?></td>
-                            <td><?php echo $record['date']; ?></td>
+                            <td><?php echo $record['diagnosis']; ?></td>
+                            <td><?php echo $record['prescription']; ?></td>
+                            <td><?php echo $record['record_date']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -307,7 +332,7 @@ if ($result_appointments) {
                         <tr>
                             <td><?php echo $result['test_name']; ?></td>
                             <td><?php echo $result['result_value']; ?></td>
-                            <td><?php echo $result['date']; ?></td>
+                            <td><?php echo $result['test_date']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -322,7 +347,7 @@ if ($result_appointments) {
 </div>
 
 <!-- Right sidebar -->
-<div class="right-sidebar" id="cal" style="width: 350px;">
+<div class="right-sidebar" id="cal">
     
     <div class="calendar">
         <h4>Calendar</h4>
@@ -397,6 +422,59 @@ if ($result_appointments) {
         calendar.render();
     });
 </script>
+<script>
+// Assuming you have a div element with id "bodyTemperatureProgress" for body temperature progress wheel
+var bodyTemperatureProgress = new ProgressBar.Circle('#bodyTemperatureProgress', {
+  strokeWidth: 6,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#8BC34A',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: null
+});
+
+// Set initial value and text
+var bodyTemperatureValue = <?php echo $body_temperature; ?>; // Assuming $body_temperature contains the temperature value
+bodyTemperatureProgress.animate(bodyTemperatureValue / 100);  // Adjust the division as per your requirement
+bodyTemperatureProgress.setText('<?php echo $body_temperature; ?>°C'); // Display temperature value inside the circle
+
+// Initialize circular progress wheel for Oxygen Levels
+// Assuming you have a div element with id "oxygenLevelsProgress" for oxygen levels progress wheel
+var oxygenLevelsProgress = new ProgressBar.Circle('#oxygenLevelsProgress', {
+  strokeWidth: 6,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#78C2AD',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: null
+});
+
+// Set initial value and text
+var oxygenLevelsValue = <?php echo $oxygen_levels; ?>; // Assuming $oxygen_levels contains the oxygen levels value
+oxygenLevelsProgress.animate(oxygenLevelsValue / 100);  // Adjust the division as per your requirement
+oxygenLevelsProgress.setText('<?php echo $oxygen_levels; ?>%'); // Display oxygen levels value inside the circle
+
+// Assuming you have a div element with id "bloodPressureProgress" for blood pressure progress wheel
+var bloodPressureProgress = new ProgressBar.Circle('#bloodPressureProgress', {
+  strokeWidth: 6,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#D86159',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: null
+});
+
+// Set initial value and text
+var bloodPressureValue = <?php echo $blood_pressure; ?>; // Assuming $blood_pressure contains the blood pressure value
+bloodPressureProgress.animate(bloodPressureValue / 100);  // Adjust the division as per your requirement
+bloodPressureProgress.setText('<?php echo $blood_pressure; ?> mmHg'); // Display blood pressure value inside the circle
+</script>
+
+<!-- Include progressbar.js library -->
+
 <script src="/Hosy-Sasa/v1/Static/patients.js"></script>
 
 </body>
