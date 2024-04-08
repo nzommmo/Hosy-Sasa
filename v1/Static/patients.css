@@ -1,4 +1,12 @@
-/* resources/css/app.css */
-@import '~@fullcalendar/core/main.css';
-@import '~@fullcalendar/daygrid/main.css';
-@import '~@fullcalendar/timegrid/main.css';
+
+#cal{
+    width: 350px;
+    background-color: red;
+}
+.calendar{
+    margin-top: -60px;
+}
+#mains{
+    margin-top: -60px;
+
+}

@@ -43,6 +43,28 @@ if ($result_lab) {
         $lab_results[] = $row;
     }
 } 
+// Fetch user's appointments from the database based on user_id
+$sql_appointments = "SELECT * 
+                    FROM schedule 
+                    INNER JOIN Doctors 
+                    ON schedule.doctor_id = Doctors.doctor_id 
+                    WHERE schedule.user_id = $user_id";
+
+$result_appointments = $conn->query($sql_appointments);
+$appointments = array();
+if ($result_appointments) {
+    while ($row = $result_appointments->fetch_assoc()) {
+        $appointments[] = array(
+            'title' => $row['title'],
+            'start' => $row['start_datetime'], // Assuming your appointment table has a column named 'start_datetime' for the start date/time of the appointment
+            'end' => $row['end_datetime'], // Assuming your appointment table has a column named 'end_datetime' for the end date/time of the appointment
+            'doctor_name' => $row['first_name'] // Fetching the doctor's name from the 'Doctors' table
+        );
+    }
+}
+
+
+
 ?>
 
 
@@ -53,9 +75,10 @@ if ($result_lab) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toggleable Sidebar</title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../Static/patients.css">
+
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../Static/admin_dashboard.css">
     <!-- Custom CSS -->
     <style>
         /* Sidebar */
@@ -178,12 +201,12 @@ if ($result_lab) {
     <div class="divider">_________________</div>
 
     <!-- Logout -->
-    <a href="#">Logout</a>
+    <a href="../logout.php">Logout</a>
 </div>
 <!-- Page content -->
-<div class="container mt-5 content flexible-div" style="width: 700px;">
+<div class="container mt-5 content flexible-div" style="width: 650px;" id="maincont">
     <!-- Welcome Message Card -->
-    <div class="row">
+    <div class="row" id="mains">
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-header">
@@ -296,21 +319,50 @@ if ($result_lab) {
 </div>
 
 
-
+</div>
 
 <!-- Right sidebar -->
-<div class="right-sidebar">
+<div class="right-sidebar" id="cal" style="width: 350px;">
+    
     <div class="calendar">
         <h4>Calendar</h4>
         <!-- Insert calendar here -->
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar')
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        })
+        calendar.render()
+      })
+      
+
+    </script>
         <div id='calendar'></div>
     </div>
-    <div class="upcoming-appointments">
-        <h4>Upcoming Appointments</h4>
-        <!-- Insert upcoming appointments here -->
+    <!-- Upcoming Appointments Card -->
+    <div class="card">
+    <div class="card-header">
+        Upcoming Appointments
+    </div>
+    <div class="card-body">
+        <?php if (count($appointments) > 0): ?>
+            <ul>
+                <?php foreach ($appointments as $appointment): ?>
+                    <li>
+                        <strong>Title:</strong> <?php echo $appointment['title']; ?><br>
+                        <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
+                        <strong>Start Time:</strong> <?php echo $appointment['start']; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>No upcoming appointments found.</p>
+        <?php endif; ?>
     </div>
 </div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -327,8 +379,25 @@ if ($result_lab) {
         }
     }
 </script>
-
-<script src="../Static/adminpanel.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                // Array of appointment objects
+                <?php foreach ($appointments as $appointment): ?>{
+                        title: '<?php echo $appointment['title']; ?>',
+                        start: '<?php echo $appointment['start']; ?>',
+                        end: '<?php echo $appointment['end']; ?>'
+                    }
+                <?php endforeach; ?>
+            ]
+        });
+        calendar.render();
+    });
+</script>
+<script src="/Hosy-Sasa/v1/Static/patients.js"></script>
 
 </body>
 </html>
