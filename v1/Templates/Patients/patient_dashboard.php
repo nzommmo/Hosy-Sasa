@@ -367,27 +367,42 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     </script>
         <div id='calendar'></div>
     </div>
-    <!-- Upcoming Appointments Card -->
-    <div class="card" id="appointments">
-    <div class="card-header">
+<!-- Upcoming Appointments Card -->
+<div class="card" id="appointments">
+    <div class="card-header" style="margin-bottom: 10px;">
         Upcoming Appointments
     </div>
-    <div class="card-body">
-        <?php if (count($appointments) > 0): ?>
-            <ul>
-                <?php foreach ($appointments as $appointment): ?>
-                    
-                        <strong>Reason:</strong> <?php echo $appointment['title']; ?><br>
-                        <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
-                        <strong>Start Time:</strong> <?php echo $appointment['start']; ?>
-                    
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
+    <?php if (count($appointments) > 0): ?>
+        <?php foreach ($appointments as $appointment): ?>
+            <div class="card-body appointment-card-body">
+                <strong>Reason:</strong> <?php echo $appointment['title']; ?><br>
+                <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
+                <strong>Start Time:</strong> <?php echo $appointment['start']; ?><br>
+                 <!-- Reschedule and Cancel buttons -->
+                 <button class="btn btn-primary">Reschedule</button>
+                <button class="btn btn-danger">Cancel</button>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="card-body">
             <p>No upcoming appointments found.</p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 </div>
+<style>
+    /* Add outline to appointment card bodies */
+    .appointment-card-body {
+        border: 1px solid #ccc; /* Gray border */
+        padding: 10px; /* Add padding for better spacing */
+        margin-bottom: 10px; /* Add margin between appointment cards */
+        border-radius: 5px; /* Add border radius for rounded corners */
+        margin-top: 10px;
+        width: 250px;
+        margin-left: 23px;
+       
+    }
+</style>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
