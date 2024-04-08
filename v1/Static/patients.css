@@ -9,3 +9,10 @@
     margin-top: -60px;
 
 }
+::-webkit-scrollbar{
+    display: none;
+}
+#appointments{
+    width: 300px;
+    margin-inline: 20px;
+}

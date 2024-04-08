@@ -368,7 +368,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         <div id='calendar'></div>
     </div>
     <!-- Upcoming Appointments Card -->
-    <div class="card">
+    <div class="card" id="appointments">
     <div class="card-header">
         Upcoming Appointments
     </div>
@@ -376,11 +376,11 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         <?php if (count($appointments) > 0): ?>
             <ul>
                 <?php foreach ($appointments as $appointment): ?>
-                    <li>
-                        <strong>Title:</strong> <?php echo $appointment['title']; ?><br>
+                    
+                        <strong>Reason:</strong> <?php echo $appointment['title']; ?><br>
                         <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
                         <strong>Start Time:</strong> <?php echo $appointment['start']; ?>
-                    </li>
+                    
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
@@ -397,7 +397,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         const content = document.getElementsByClassName("content")[0];
         if (sidebar.style.width === "250px") {
             sidebar.style.width = "0";
-            content.style.marginLeft = "0";
+            content.style.marginLeft = "150px";
         } else {
             sidebar.style.width = "250px";
             content.style.marginLeft = "250px";
