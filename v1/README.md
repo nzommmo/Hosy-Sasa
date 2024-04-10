@@ -25,22 +25,42 @@ https://github.com/nzommmo/Hosy-Sasa<br>
 4.The Loading page pops up and loads for a maximum of 5 seconds after which the main page is display.<br>
 
 ## Features
-11.Patients managing their appointments,prescription,medical reports and lab reports.
-2.Doctors managing their patients data and also their appointments.
+1. Integrated with three personalized dashboards(Patients,Doctors and Admin).
+2. Patients managing their appointments,prescription,medical reports and lab reports.
+3. Doctors managing their patients data and also their appointments.
+4. Admin has overall powers overseeing both the doctors and patients.
 
 
 Supporting Stack:<br>
-1.HTML, CSS, JAVASCRIPT for Frontend Development.<br>
-2.Bootsrap <br>
-3.PHP for backend development.   
+1. HTML, CSS, JAVASCRIPT for Frontend Development.<br>
+2. Bootsrap <br>
+3. PHP for backend development.   
+4. Fullcalender a javascript library.
 
 ## License
 
 1.This project is licensed under the [MIT License](LICENSE).
+The MIT License (MIT)
 
-The MIT License is a permissive open-source license that allows you to use, modify, and distribute this software for any purpose, with or without attribution. See the [LICENSE](LICENSE) file for the full text of the license.
+Copyright (c) 2015-present Jason Miller
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 2.SSL Certificate
 ### Overview
