@@ -215,12 +215,12 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     <!-- Close button -->
     <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
     <!-- Sidebar links -->
-    <a href="#" id="accountdetailsbtn">Home</a>
+    <a href="" id="Homebtn">Home</a>
     <!-- Divider -->
     <div class="divider">____________</div>
-    <a href="#" id="addstudentbtn">Vital Signs</a>
-    <a href="" id="addstudentbtn">Medical Records </a>
-    <a href="#" id="addstudentbtn">Lab Results</a>
+    <a href="#" id="vitalsbtn">Vital Signs</a>
+    <a href="#" id="medicalsbtn">Medical Records </a>
+    <a href="#" id="labsbtn">Lab Results</a>
     <div class="divider">_________________</div>
 
     <!-- Logout -->
@@ -282,7 +282,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     </div>
 </div>
 <!-- Medical Records Card -->
-<div class="card">
+<div class="card-patient" id="medicalrecord">
     <div class="card-header">
         Medical Records
     </div>
@@ -313,7 +313,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 </div>
 
 <!-- Lab Results Card -->
-<div class="card">
+<div class="card-patient" id="labresults">
     <div class="card-header">
         Lab Results
     </div>
@@ -405,6 +405,36 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script to toggle medical and lab records cards-->
+<script>
+    const labresults = document.getElementById("labresults")
+
+    //Home  button clicked
+    function hideAllContent(){
+        var contentcards = document.getElementsByClassName("card-patient");
+        for (var i = 0;i < contentcards.length;i++ ){
+            contentcards[i].style.display = "none";
+        }
+    }
+    document.getElementById("Homebtn").addEventListener("click",hideAllContent())
+
+    document.addEventListener("DOMContentLoaded",hideAllContent())
+
+    //lab results button clicked
+    document.getElementById("labsbtn").addEventListener("click",function(){
+        hideAllContent();
+        document.getElementById("labresults").style.display = "block";
+    })
+
+    //Medical records button clicked
+    document.getElementById("medicalsbtn").addEventListener("click",function(){
+        hideAllContent();
+        document.getElementById("medicalrecord").style.display = "block";
+    })
+
+
+</script>
 
 <script>
     function toggleSidebar() {
