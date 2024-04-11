@@ -22,13 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['newDateTime'])) {
             $newDateTime = mysqli_real_escape_string($conn, $_POST['newDateTime']);
             // Update the appointment in the database with the new date and time
-            $updateQuery = "UPDATE appointments SET start_datetime = '$newDateTime' WHERE appointment_id = '$appointmentId'";
+            $updateQuery = "UPDATE schedule SET start_datetime = '$newDateTime' WHERE id = '$appointmentId'";
             if (mysqli_query($conn, $updateQuery)) {
                 // Appointment rescheduled successfully
                 echo "Appointment rescheduled successfully.";
             } else {
                 // Error occurred while rescheduling appointment
-                echo "Error: " . mysqli_error($conn);
+                echo "Error updating appointment: " . mysqli_error($conn);
             }
         } else {
             // New date and time not provided

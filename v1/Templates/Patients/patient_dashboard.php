@@ -64,7 +64,8 @@ if ($result_appointments) {
             'title' => $row['title'],
             'start' => $row['start_datetime'], // Assuming your appointment table has a column named 'start_datetime' for the start date/time of the appointment
             'end' => $row['end_datetime'], // Assuming your appointment table has a column named 'end_datetime' for the end date/time of the appointment
-            'doctor_name' => $row['first_name'] // Fetching the doctor's name from the 'Doctors' table
+            'doctor_name' => $row['first_name'], // Fetching the doctor's name from the 'Doctors' table
+            'appointmentId' => $row['id']
         );
     }
 }
