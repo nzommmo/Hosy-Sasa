@@ -379,9 +379,9 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
                 <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
                 <strong>Start Time:</strong> <?php echo $appointment['start']; ?><br>
                  <!-- Reschedule and Cancel buttons -->
-                 <button class="btn btn-primary">Reschedule</button>
+                        <button class="btn btn-primary" onclick="openRescheduleForm(<?php echo $appointment['appointment_id']; ?>)">Reschedule</button>
                 <button class="btn btn-danger">Cancel</button>
-            </div>
+           </div>
         <?php endforeach; ?>
     <?php else: ?>
         <div class="card-body">
@@ -389,6 +389,48 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         </div>
     <?php endif; ?>
 </div>
+
+<!-- Reschedule Form -->
+<div id="rescheduleForm" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+        <h5 class="modal-title">Reschedule Appointment</h5>
+        <button type="button" class="close" onclick="closeRescheduleForm()">&times;</button>
+    </div>
+            <div class="modal-body">
+                <form id="rescheduleAppointmentForm" action="Reschedule.php" method="POST">
+                    <div class="form-group">
+                        <label for="newDateTime">New Date and Time</label>
+                        <input type="datetime-local" class="form-control" id="newDateTime" name="newDateTime" required>
+                    </div>
+                    <input type="hidden" id="appointmentId" name="appointmentId">
+                    <button type="submit" class="btn btn-primary">Reschedule</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function openRescheduleForm(appointmentId) {
+        const form = document.getElementById("rescheduleForm")
+       form.style.display = "block"
+
+        // Assuming you want to set the appointment ID in a hidden input field inside the modal
+        document.getElementById("appointmentId").value = appointmentId;
+    }
+    function closeRescheduleForm() {
+        const form = document.getElementById("rescheduleForm");
+        form.style.display = "none";
+    }
+</script>
+
+
 <style>
     /* Add outline to appointment card bodies */
     .appointment-card-body {
@@ -457,10 +499,10 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
             events: [
                 // Array of appointment objects
                 <?php foreach ($appointments as $appointment): ?>{
-                        title: '<?php echo $appointment['title']; ?>',
-                        start: '<?php echo $appointment['start']; ?>',
-                        end: '<?php echo $appointment['end']; ?>'
-                    }
+                    title: '<?php echo $appointment['title']; ?>',
+                    start: '<?php echo $appointment['start']; ?>',
+                    end: '<?php echo $appointment['end']; ?>'
+                },
                 <?php endforeach; ?>
             ]
         });
