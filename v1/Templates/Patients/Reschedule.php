@@ -1,5 +1,4 @@
 <?php
-$sql_dump();
 // Include the config.php file to establish database connection
 include_once "../config.php";
 
