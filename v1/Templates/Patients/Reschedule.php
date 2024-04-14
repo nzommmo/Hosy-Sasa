@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+
 // Retrieve username and user_id from the session
 $user_id = $_SESSION['user_id'];
 
