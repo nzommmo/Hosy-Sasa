@@ -1,7 +1,8 @@
 <?php
-// Include the config.php file to establish database connection
-include_once "../config.php";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+include_once "../config.php";
 // Start PHP session
 session_start();
 
@@ -12,34 +13,41 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Check if the form is submitted
+// Retrieve username and user_id from the session
+$user_id = $_SESSION['user_id'];
+
+// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the appointment ID is set in the POST data
-    if (isset($_POST['appointmentId'])) {
-        // Sanitize the input to prevent SQL injection
-        $appointmentId = mysqli_real_escape_string($conn, $_POST['appointmentId']);
-        // Assuming you want to update the appointment with a new date and time
-        if (isset($_POST['newDateTime'])) {
-            $newDateTime = mysqli_real_escape_string($conn, $_POST['newDateTime']);
-            // Update the appointment in the database with the new date and time
-            $updateQuery = "UPDATE schedule SET start_datetime = '$newDateTime' WHERE id = '$appointmentId'";
-            if (mysqli_query($conn, $updateQuery)) {
-                // Appointment rescheduled successfully
-                echo "Appointment rescheduled successfully.";
-            } else {
-                // Error occurred while rescheduling appointment
-                echo "Error updating appointment: " . mysqli_error($conn);
-            }
+    // Check if all required fields are set
+    if (isset($_POST['newDateTime']) && isset($_POST['appointmentId'])) {
+        // Sanitize and validate input (you should do more thorough validation)
+        $newDateTime = $_POST['newDateTime'];
+        $appointmentId = $_POST['appointmentId'];
+
+        // Update the appointment record in the database
+        $newDateTime = $conn->real_escape_string($newDateTime); // Sanitize datetime input
+        $appointmentId = intval($appointmentId); // Sanitize appointment ID input
+
+        $sql = "UPDATE schedule SET start_datetime = '$newDateTime' WHERE id = $appointmentId";
+
+        if ($conn->query($sql) === TRUE) {
+            // Appointment rescheduled successfully
+            $_SESSION['success_message'] = "Appointment rescheduled successfully.";
         } else {
-            // New date and time not provided
-            echo "Error: New date and time not provided.";
+            // Failed to reschedule appointment
+            $_SESSION['error_message'] = "Error: " . $conn->error;
         }
     } else {
-        // Appointment ID not provided
-        echo "Error: Appointment ID not provided.";
+        // Required fields are missing
+        $_SESSION['error_message'] = "Error: Required fields are missing.";
     }
+
+    // Redirect back to the form page
+    header("Location: Reschedule.php"); // Change 'reschedule_form.php' to the actual page containing the form
+    exit();
 } else {
-    // Form not submitted via POST method
-    echo "Error: Form not submitted.";
+    // Redirect to the appointments page or show an error message
+    header("Location: patient_dashboard.php");
+    exit();
 }
 ?>

@@ -29,6 +29,7 @@ https://github.com/nzommmo/Hosy-Sasa<br>
 2. Patients managing their appointments,prescription,medical reports and lab reports.
 3. Doctors managing their patients data and also their appointments.
 4. Admin has overall powers overseeing both the doctors and patients.
+5. Fully functional calender allowing you to book, reschedule and cancel their appointments.
 
 
 Supporting Stack:<br>

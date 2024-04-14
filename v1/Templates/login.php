@@ -17,12 +17,12 @@ if (isset($_POST['login'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password_hash'])) {
-            if ($row['user_type'] == 'Admin') { // Check if user is admin
+            if ($row['user_type'] == 'Doctor') { // Check if user is admin
                 $_SESSION['user_id'] = $row['user_id']; // Store user ID in session
                 echo "Login successful";
 
                 // Redirect to admin panel after successful login
-                header("Location: adminpanel.php");
+                header("Location: ../Templates/Doctors/doctor_dashboard.php");
                 exit(); // Exit to prevent further execution
             } elseif ($row['user_type'] == 'Patient') { // Check if user is patient
                 $_SESSION['user_id'] = $row['user_id']; // Store user ID in session
