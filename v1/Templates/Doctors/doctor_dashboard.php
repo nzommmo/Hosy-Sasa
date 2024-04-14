@@ -27,8 +27,8 @@ if ($result->num_rows > 0) {
 
 // Fetch user's medical records from the database based on user_id
 $sql_medical = "SELECT * FROM medical_records 
-                    INNER JOIN patients ON medical_records.patient_id = patients.patient_id 
-                    WHERE patients.user_id = $user_id";
+                    INNER JOIN Doctors ON medical_records.doctor_id = Doctors.doctor_id 
+                    WHERE Doctors.user_id = $user_id";
 
 $result_medical = $conn->query($sql_medical);
 $medical_records = array();
@@ -229,15 +229,41 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 </div>
 <!-- Page content -->
 <div class="container mt-5 content flexible-div" style="width: 650px;" id="maincont">
+<div id="message">
+    <style>
+        #message{
+    width: 400px;
+    margin-bottom: 65px;
+}
+
+    </style>
+    <?php
+    session_start();
+
+    // Display success message if set
+    if (isset($_SESSION['success_message'])) {
+        echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+        unset($_SESSION['success_message']); // Remove the success message from session
+    }
+
+    // Display error message if set
+    if (isset($_SESSION['error_message'])) {
+        echo '<div class="alert alert-danger">' . $_SESSION['error_message'] . '</div>';
+        unset($_SESSION['error_message']); // Remove the error message from session
+    }
+    ?>
+</div>
+
+
     <!-- Welcome Message Card -->
     <div class="row" id="mains">
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-header">
-                    Welcome  Dr.<?php echo $firstname; ?>!
+                    Welcome <?php echo $firstname; ?>!
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Welcome to your dashboard. Here you can manage your patients medical records, lab results, prescriptions and more.</p>
+                    <p class="card-text">Welcome to your dashboard. Here you can manage your vital signs, medical records, lab results, and more.</p>
                 </div>
             </div>
         </div>
