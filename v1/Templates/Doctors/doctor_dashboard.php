@@ -219,10 +219,19 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     <a href="" id="Homebtn">Home</a>
     <!-- Divider -->
     <div class="divider">____________</div>
-    <a href="#" id="vitalsbtn">Vital Signs</a>
-    <a href="#" id="medicalsbtn">Medical Records </a>
-    <a href="#" id="labsbtn">Lab Results</a>
+    <a href="#" id="Recordvitalsbtn">Record Vital Signs</a>
+    <a href="#" id="Recordmedicalsbtn">Record Medical Records </a>
+    <a href="#" id="Recordlabsbtn">Record Lab Results</a>
+    <a href="#" id="Recordappointment">Schedule appointment</a>
+
     <div class="divider">_________________</div>
+   <a href="#" id="vitalsbtn">Patients Vital Signs</a>
+    <a href="#" id="medicalsbtn">Patients Medical Records </a>
+    <a href="#" id="labsbtn">Patients Lab Results</a>
+    <a href="#" id="labsbtn">View Appointments</a>
+
+    <div class="divider">_________________</div>
+
 
     <!-- Logout -->
     <a href="../logout.php">Logout</a>
@@ -255,6 +264,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 </div>
 
 
+
     <!-- Welcome Message Card -->
     <div class="row" id="mains">
         <div class="col-md-12 mb-4">
@@ -263,81 +273,23 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
                     Welcome <?php echo $firstname; ?>!
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Welcome to your dashboard. Here you can manage your vital signs, medical records, lab results, and more.</p>
+                    <p class="card-text">Welcome to your dashboard. Here you can manage your patients vital signs, medical records, lab results, and more.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Existing Cards -->
-    <div class="row">
-<!-- Body Temperature Card -->
-<!-- Body Temperature Card -->
-<div class="col-md-4 mb-4">
-    <div class="card">
-        <div class="card-header">
-            Body Temperature
-        </div>
-        <div class="card-body">
-            <div id="bodyTemperatureProgress"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Oxygen Levels Card -->
-<div class="col-md-4 mb-4">
-    <div class="card">
-        <div class="card-header">
-            Oxygen Levels
-        </div>
-        <div class="card-body">
-            <div id="oxygenLevelsProgress"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Blood Pressure Card -->
-<div class="col-md-4 mb-4">
-    <div class="card">
-        <div class="card-header">
-            Blood Pressure
-        </div>
-        <div class="card-body">
-            <div id="bloodPressureProgress">
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Medical Records Card -->
-<div class="card-patient" id="medicalrecord">
+<!-- lab Results Form -->
+<div class="card-patient" id="medicalrecordform">
     <div class="card-header">
-        Medical Records
+        Record Medical Records
     </div>
     <div class="card-body">
-        <?php if (count($medical_records) > 0): ?>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Diagnosis</th>
-                        <th scope="col">Prescription</th>
-                        <th scope="col">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($medical_records as $record): ?>
-                        <tr>
-                            <td><?php echo $record['diagnosis']; ?></td>
-                            <td><?php echo $record['prescription']; ?></td>
-                            <td><?php echo $record['record_date']; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No medical records found for the user.</p>
-        <?php endif; ?>
+        <?php include_once "Lab_Results_Form.php";
+        ?>
     </div>
-</div>
+
 
 <!-- Lab Results Card -->
 <div class="card-patient" id="labresults">
@@ -501,6 +453,12 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         hideAllContent();
         document.getElementById("medicalrecord").style.display = "block";
     })
+        //Lab Results Form button clicked
+        document.getElementById("Recordlabsbtn").addEventListener("click",function(){
+        hideAllContent();
+        document.getElementById("medicalrecordform").style.display = "block";
+    })
+
 
 
 </script>
