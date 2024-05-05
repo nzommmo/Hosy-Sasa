@@ -49,26 +49,65 @@ if ($result_lab) {
         $lab_results[] = $row;
     }
 } 
-// Fetch user's appointments from the database based on user_id
-$sql_appointments = "SELECT * 
+
+
+//SQL query to fetch user's appointments
+$sql_appointments = "SELECT schedule.*, patients.patient_id AS patient_id
                     FROM schedule 
-                    INNER JOIN Doctors 
-                    ON schedule.doctor_id = Doctors.doctor_id 
-                    WHERE schedule.user_id = $user_id";
+                    INNER JOIN patients ON schedule.patient_id = patients.patient_id 
+                    WHERE patients.user_id = $user_id";
+
 
 $result_appointments = $conn->query($sql_appointments);
 $appointments = array();
+
 if ($result_appointments) {
     while ($row = $result_appointments->fetch_assoc()) {
         $appointments[] = array(
             'title' => $row['title'],
-            'start' => $row['start_datetime'], // Assuming your appointment table has a column named 'start_datetime' for the start date/time of the appointment
-            'end' => $row['end_datetime'], // Assuming your appointment table has a column named 'end_datetime' for the end date/time of the appointment
-            'doctor_name' => $row['first_name'], // Fetching the doctor's name from the 'Doctors' table
+            'start' => $row['start_datetime'],
+            'end' => $row['end_datetime'],
+            'patient_id' => $row['patient_id'],
+            
+            //'doctor_name' => $row['first_name'], // Assuming 'first_name' is the correct column name
             'appointmentId' => $row['id']
         );
+        $patient_id = $appointments[0]['patient_id'];
+        echo($patient_id);
+
     }
+} else {
+    // Handle SQL query error
+    echo "Error: " . $conn->error;
 }
+
+
+$sql_doctor= "SELECT * 
+                    FROM schedule 
+                    INNER JOIN Doctors 
+                    ON schedule.doctor_id = Doctors.doctor_id 
+                    WHERE schedule.patient_id = $patient_id";
+
+$result_doctor = $conn->query($sql_doctor);
+$doctor = array();
+
+if ($result_doctor) {
+    while ($row = $result_doctor->fetch_assoc()) {
+        $doctor[] = array(
+            
+            'doctor_name' => $row['first_name'], // Assuming 'first_name' is the correct column name
+         
+        );
+        var_dump($doctor[0]['doctor_name']);
+    }
+} else {
+    // Handle SQL query error
+    echo "Error: " . $conn->error;
+}
+                    
+              
+                    
+                    
 // Fetch user's vital signs from the database based on user_id
 $sql_vital_signs = "SELECT * FROM vital_signs 
                     INNER JOIN patients ON vital_signs.patient_id = patients.patient_id 
@@ -377,6 +416,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 <div class="right-sidebar" id="cal">
     
     <div class="calendar">
+        
         <h4>Calendar</h4>
         <!-- Insert calendar here -->
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
@@ -403,7 +443,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         <?php foreach ($appointments as $appointment): ?>
             <div class="card-body appointment-card-body">
                 <strong>Reason:</strong> <?php echo $appointment['title']; ?><br>
-                <strong>Doctor:</strong> <?php echo $appointment['doctor_name']; ?><br>
+                <strong>Doctor:</strong> <?php echo ($doctor[0]['doctor_name']); ?><br>
                 <strong>Start Time:</strong> <?php echo $appointment['start']; ?><br>
                  <!-- Reschedule and Cancel buttons -->
                         <button class="btn btn-primary" onclick="openRescheduleForm(<?php echo $appointment['appointmentId']; ?>)">Reschedule</button>

@@ -220,7 +220,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     <!-- Divider -->
     <div class="divider">____________</div>
     <a href="#" id="Recordvitalsbtn">Record Vital Signs</a>
-    <a href="#" id="Recordmedicalsbtn">Record Medical Records </a>
+    <a href="Medical_Records_Form.php" id="Recordmedicalsbtn">Record Medical Records </a>
     <a href="#" id="Recordlabsbtn">Record Lab Results</a>
     <a href="#" id="Recordappointment">Schedule appointment</a>
 
@@ -228,7 +228,7 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
    <a href="#" id="vitalsbtn">Patients Vital Signs</a>
     <a href="#" id="medicalsbtn">Patients Medical Records </a>
     <a href="#" id="labsbtn">Patients Lab Results</a>
-    <a href="#" id="labsbtn">View Appointments</a>
+    <a href="#" id="viewappointments">View Appointments</a>
 
     <div class="divider">_________________</div>
 
@@ -280,13 +280,15 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     </div>
 
 
+
+
+
+
 <!-- lab Results Form -->
-<div class="card-patient" id="medicalrecordform">
-    <div class="card-header">
-        Record Medical Records
-    </div>
+<div class="card-patient" id="labresults">
+  
     <div class="card-body">
-        <?php include_once "Lab_Results_Form.php";
+        <?php require_once "Lab_Results_Form.php";
         ?>
     </div>
 
@@ -345,6 +347,11 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 
     </script>
         <div id='calendar'></div>
+        <style>
+            #calendar {
+               display:"";
+            }
+        </style>
     </div>
 <!-- Upcoming Appointments Card -->
 <div class="card" id="appointments">
@@ -456,8 +463,14 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
         //Lab Results Form button clicked
         document.getElementById("Recordlabsbtn").addEventListener("click",function(){
         hideAllContent();
-        document.getElementById("medicalrecordform").style.display = "block";
+        document.getElementById("labresults").style.display = "block";
     })
+    //View appointments button clicked
+    document.getElementById("viewappointments").addEventListener("click",function(){
+        hideAllContent();
+        document.getElementById("calendar").style.display = "block";
+    })
+
 
 
 
