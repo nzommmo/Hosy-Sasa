@@ -73,7 +73,7 @@ if ($result_appointments) {
             'appointmentId' => $row['id']
         );
         $patient_id = $appointments[0]['patient_id'];
-        echo($patient_id);
+      //  echo($patient_id);
 
     }
 } else {
@@ -98,7 +98,7 @@ if ($result_doctor) {
             'doctor_name' => $row['first_name'], // Assuming 'first_name' is the correct column name
          
         );
-        var_dump($doctor[0]['doctor_name']);
+     //   var_dump($doctor[0]['doctor_name']);
     }
 } else {
     // Handle SQL query error
