@@ -363,6 +363,63 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
 
 
 </div>
+<!-- Vital signs records -->
+<?php /*
+$sql_doctor = "SELECT doctor_id FROM Doctors WHERE user_id = '$user_id'";
+$result_doctor = $conn->query($sql_doctor);
+$row_doctor = $result_doctor->fetch_assoc();
+$doctor_id = $row_doctor['doctor_id'];
+
+
+// Fetch distinct patient IDs recorded by the doctor
+$sql_patients = "SELECT DISTINCT patient_id FROM vital_signs WHERE doctor_id = '$doctor_id'";
+$result_patients = $conn->query($sql_patients);
+
+// Check if there are any patients recorded
+if ($result_patients->num_rows > 0) {
+    // Output data for each patient
+    while ($row_patient = $result_patients->fetch_assoc()) {
+        $patient_id = $row_patient['patient_id'];
+
+        // Fetch vital signs for the current patient
+        $sql_vital_signs = "SELECT * FROM vital_signs WHERE doctor_id = '$doctor_id'";
+        $result_vital_signs = $conn->query($sql_vital_signs);
+
+        // Check if there are any vital signs recorded for the current patient
+        if ($result_vital_signs->num_rows > 0) {
+            // Output table for the current patient
+            echo "<h3>Vital Signs Recorded for Patient ID: $patient_id</h3>";
+            echo '<div class="container mt-3">';
+            echo '<table class="table table-bordered table-striped">';
+            echo '<thead class="thead-dark">';
+            echo '<tr><th>Vital Name</th><th>Value</th><th>Date Recorded</th></tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
+            // Output data of each row
+            while ($row_vital_signs = $result_vital_signs->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>' . $row_vital_signs['sign_name'] . '</td>';
+                echo '<td>' . $row_vital_signs['sign_value'] . '</td>';
+                echo '<td>' . $row_vital_signs['sign_date'] . '</td>';
+                echo '</tr>';
+            }
+
+            // Close table and container for the current patient
+            echo '</tbody>';
+            echo '</table>';
+            echo '</div>';
+        } else {
+            // No vital signs recorded for the current patient
+            echo "<p>No vital signs recorded for Patient ID: $patient_id</p>";
+        }
+    }
+} else {
+    // No patients recorded by the doctor
+    echo "No patients recorded.";
+}
+
+*/?>
 
 <!-- Right sidebar -->
 <div class="right-sidebar" id="cal">
@@ -397,16 +454,23 @@ $blood_pressure = isset($vital_signs['Blood Pressure']) ? $vital_signs['Blood Pr
     </div>
     <?php if (count($appointments) > 0): ?>
         <?php foreach ($appointments as $appointment): ?>
+            <?php foreach ($patient as $patients): ?>
+
             <div class="card-body appointment-card-body">
                 <strong>Reason:</strong> <?php echo $appointment['title']; ?><br>
-                <strong>Patient:</strong> <?php echo ($patient[0]['patient_name']); ?><br>
+                <strong>Patient:</strong> <?php echo $patients['patient_name']; ?><br>
                 <strong>Start Time:</strong> <?php echo $appointment['start']; ?><br>
                  <!-- Reschedule and Cancel buttons -->
                         <button class="btn btn-primary" onclick="openRescheduleForm(<?php echo $appointment['appointmentId']; ?>)">Reschedule</button>
                 <button class="btn btn-danger">Cancel</button>
            </div>
         <?php endforeach; ?>
+        <?php endforeach; ?>
+
+
     <?php else: ?>
+        
+
         <div class="card-body">
             <p>No upcoming appointments found.</p>
         </div>
