@@ -429,7 +429,7 @@ if ($result_patients->num_rows > 0) {
         <!-- Insert calendar here -->
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
     <script>
-
+//display the calender from fullcalender
       document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar')
         const calendar = new FullCalendar.Calendar(calendarEl, {
