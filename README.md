@@ -19,10 +19,10 @@ The admin panel is the overall as it can maintain both patient and doctor inform
 ## Usage
 
 1.First fork the respository 
-https://github.com/nzommmo/Hosy-Sasa<br>
-2.Make sure to clone the forked repository under your htdocs folder under the xampp directory.<br>
+https://github.com/nzommmo/Hosy-Sasa <br>
+2.Make sure to clone the forked repository under your htdocs folder under the xampp directory. <br>
 3.Open your Browser and type : http://localhost/Hosy-Sasa/index.html <br>
-4.The Loading page pops up and loads for a maximum of 5 seconds after which the main page is display.<br>
+4.The Loading page pops up and loads for a maximum of 5 seconds after which the main page is display. <br>
 
 ## Features
 1. Integrated with three personalized dashboards(Patients,Doctors and Admin).
@@ -76,5 +76,4 @@ GitHub: nzommmo<br>
 
 ## LivePreview
 
-## Pitch Deck Presentation
 
